@@ -6,6 +6,34 @@
 <meta charset="UTF-8">
 <title>Hello Jake</title>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/css/style.css" />
+<script type="text/javascript" src="<%=request.getContextPath() %>/js/jquery-3.5.1.js"></script>
+<script>
+	$(function () {
+		/**
+		 * 로그인 폼 유효성 검사 방법 
+		 * 
+		 * 폼 전송 방지하는 법 2가지
+		 * 1. return false;
+		 * 2. e.preventDefault();
+		 */
+		$(loginFrm).submit(function () {
+			//아이디 검사
+			var $memberId = $(memberId);
+			if(/^.{4,}$/.test($memberId.val()) == false){
+				alert("유효한 아이디를 입력하세요.");
+				$memberId.select();
+				return false;//폼 전송 방지
+			}
+			//비번검사
+			var $password = $(password);
+			if(/^.{4,}$/.test($password.val()) == false){
+				alert("유효한 비밀번호를 입력하세요.");
+				$password.select();
+				e.preventDefault();//폼 전송 방지
+			}
+		});
+	});
+</script>
 </head>
 <body>
 	<div id="container">
@@ -13,7 +41,7 @@
 			<h1>Hello Jake</h1>
 			<!-- 로그인메뉴 시작 -->
 			<div class="login-container">
-				<form id="loginFrm">
+				<form id="loginFrm" action="<%=request.getContextPath() %>/member/login" method="POST">
 					<table>
 						<tr>
 							<td><input type="text" name="memberId" id="memberId" placeholder="아이디" tabindex="1"></td>
