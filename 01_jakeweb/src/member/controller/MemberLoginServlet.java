@@ -2,6 +2,7 @@ package member.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,15 +43,22 @@ public class MemberLoginServlet extends HttpServlet {
 		 * member객체가 존재하지 않을 경우 : 아이디 오류 --> 로그인 실패
 		 */
 		Member member = memberService.selectOne(memberId);
-		System.out.println("member@servlet = " + member);
+//		System.out.println("member@servlet = " + member);
 		
+		/* 로그인 성공 / 실패 메시지 지정 */
 		if (member != null && password.equals(member.getPassword())) { // 로그인 성공
+//			request.setAttribute("msg", "로그인 성공!"); --> 그냥 로그인 성공하면 alert창 안뜨게 하려고.
 			
+			/* JSP에서 로그인한 사용자의 정보를 출력하기 위해, memberLoggedIn이라는 이름으로 member를 request에 저장 */
+			request.setAttribute("memberLoggedIn", member);
 		} else { // 로그인 실패
-			
+			request.setAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
+			request.setAttribute("loc", request.getContextPath());
 		}
 		
 		// 4. view단 처리 (JSP)
+		request.getRequestDispatcher("/index.jsp")
+			   .forward(request, response);
 		
 		/**
 		 * 코드 쓰면서(특히 servlet 작성할때!)

@@ -1,5 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="member.model.vo.Member"%>
+<% 
+	String msg = (String)request.getAttribute("msg");
+	//System.out.println("msg@header.jsp = " + msg);
+	String loc = (String)request.getAttribute("loc");
+	/**
+	 * 서버 구동 --> index.jsp 접속
+	 * : msg = null로 뜬다.
+	 *
+	 * 맨 처음에 index.jsp에 접속하면, null값 이었던 msg가 출력된다. (맨 처음에 sout(msg)하도록 작성했으니까.)
+	 * 로그인을 하고나면, 로그인 성공여부에 따른 msg가 출력된다.
+	 */
+	 
+	 /** 
+	  * 로그인한 Member 객체  request로부터 받기
+	  * 로그인 실패했다면 Member객체인 memberLoggedIn은 null일 것임.
+	  */
+	 Member memberLoggedIn = (Member)request.getAttribute("memberLoggedIn");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +27,9 @@
 <link rel="stylesheet" href="<%=request.getContextPath() %>/css/style.css" />
 <script type="text/javascript" src="<%=request.getContextPath() %>/js/jquery-3.5.1.js"></script>
 <script>
+<% if (msg != null) { %> alert("<%= msg %>"); <% } %>
+<% if (loc != null) { %> location.href = "<%= loc %>"; <% } %>
+
 	$(function () {
 		/**
 		 * 로그인 폼 유효성 검사 방법 
@@ -41,6 +63,7 @@
 			<h1>Hello Jake</h1>
 			<!-- 로그인메뉴 시작 -->
 			<div class="login-container">
+			<% if(memberLoggedIn == null) { %>
 				<form id="loginFrm" action="<%=request.getContextPath() %>/member/login" method="POST">
 					<table>
 						<tr>
@@ -61,6 +84,22 @@
 						</tr>
 					</table>
 				</form>
+			<%} else { %>
+			<%-- 로그인 성공시 --%>
+			<table id="logged-in">
+				<tr>
+					<td>
+						<%= memberLoggedIn.getMemberName() %>님 안녕하세요.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button" value="내 정보보기" />
+						<input type="button" value="로그아웃" />
+					</td>
+				</tr>
+			</table>
+			<% } %>
 			</div>
 			<!-- 로그인메뉴 끝-->
 			<!-- 메인메뉴 시작 -->
